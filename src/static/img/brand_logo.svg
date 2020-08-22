@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="4000"
+   height="1000"
+   viewBox="0 0 1058.3333 264.58334"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="EAP talk with text.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.24748737"
+     inkscape:cx="2264.927"
+     inkscape:cy="478.12359"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1838"
+     inkscape:window-height="1051"
+     inkscape:window-x="82"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-32.416653)">
+    <path
+       style="fill:#ffffff;stroke-width:0.9194383"
+       d="M 500,200 0,350 500,500 845,396.5 v 174.35938 a 37.5,37.5 0 0 0 -18.78516,32.4414 37.5,37.5 0 0 0 17.55469,31.70313 L 805,746.91992 a 120,200 0 0 0 120,0 L 885.74219,633.5918 a 37.5,37.5 0 0 0 15.47265,-30.29102 37.5,37.5 0 0 0 -19.07226,-32.63476 V 385.35742 L 1000,350 Z M 250,475 v 180 a 250.00001,75 0 0 0 250,75 250.00001,75 0 0 0 250,-75 V 475 l -250,75 z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,32.416653)"
+       id="rect3724"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:39.37252426px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.98431301;"
+       x="297.08929"
+       y="235.57886"
+       id="text3798"><tspan
+         sodipodi:role="line"
+         id="tspan3796"
+         x="297.08929"
+         y="235.57886"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:188.98809814px;font-family:'Noto Serif';-inkscape-font-specification:'Noto Serif';stroke-width:0.98431301;fill:#ffffff;">EAP talk</tspan><tspan
+         sodipodi:role="line"
+         x="297.08929"
+         y="334.69385"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:188.98809814px;font-family:'Noto Serif';-inkscape-font-specification:'Noto Serif';stroke-width:0.98431301;fill:#ffffff;"
+         id="tspan3800" /></text>
+  </g>
+</svg>

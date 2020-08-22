@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="1000"
+   viewBox="0 0 264.58333 264.58334"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="EAP talk Favico.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="512.91119"
+     inkscape:cy="480.61242"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1838"
+     inkscape:window-height="1051"
+     inkscape:window-x="82"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-32.416653)">
+    <circle
+       style="fill:#081e74;fill-opacity:1;stroke-width:0.26458332"
+       id="path81"
+       cx="132.29167"
+       cy="164.70831"
+       r="132.29167" />
+    <path
+       style="fill:#ffffff;stroke-width:0.20677784"
+       d="M 132.29167,96.717973 19.84375,130.45235 132.29167,164.18672 209.88073,140.91 v 39.2127 a 8.4335936,8.4335936 0 0 0 -4.22471,7.29594 8.4335936,8.4335936 0 0 0 3.94798,7.1299 l -8.71911,25.16944 a 26.9875,44.979166 0 0 0 26.9875,0 l -8.82891,-25.48702 a 8.4335936,8.4335936 0 0 0 3.47973,-6.81232 8.4335936,8.4335936 0 0 0 -4.28927,-7.33942 v -41.67514 l 26.50564,-7.95173 z M 76.067707,158.56433 v 40.48125 a 56.22396,16.867187 0 0 0 56.223963,16.86718 56.22396,16.867187 0 0 0 56.22395,-16.86718 v -40.48125 l -56.22395,16.86718 z"
+       id="rect3724"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
