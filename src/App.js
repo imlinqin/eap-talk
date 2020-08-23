@@ -13,10 +13,10 @@ import SLogo from './static/img/brand_logo_small.svg'
 import GuestImg from './static/img/guest_avatar.jpg'
 
 
-import { HeartOutlined, HeartFilled, LoadingOutlined, createFromIconfontCN,AudioFilled,SoundFilled, PlayCircleFilled } from '@ant-design/icons';
+import { HeartOutlined, HeartFilled, LoadingOutlined, createFromIconfontCN, AudioFilled, SoundFilled, PlayCircleFilled } from '@ant-design/icons';
 // customer icon
 const Iconfont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2022999_18mdtx4f9tx.js', // 在 iconfont.cn 上生成
+    scriptUrl: '//at.alicdn.com/t/font_2022999_s8y941fq81.js', // 在 iconfont.cn 上生成
 });
 
 const history = createBrowserHistory();
@@ -24,6 +24,33 @@ const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 const { TabPane } = Tabs;
+
+
+// Global config
+const TEST_CARD_AMOUNT = 12;
+const HISTORY_CARD_AMOUNT = 8;
+const COLLECTION_CARD_AMOUNT = 8;
+const PAGINATION_PADDING = 2;    // Integer
+//TODO: substitute on deployment
+const API_SIGNATURE_SECRET = '6NKX:Ak!eZ@*XdjW';
+const PASSWORD_MD5_SECRET = '%N#<Zw&&ZLm?23qD';
+const COOKIE_STORE_SECRET = 'nk>p)g}epBRX2)YR';
+const API_PATH = '//VMWare-Host:4430/api/1.0';
+const AJAX_TIMEOUT = 10000; // time in milliseconds
+const MAX_COOKIE_EXPIRY = 3650; // time in days
+const GUEST_AVATAR = './img/guest_avatar.jpg';
+const GRAVATAR_URL = '//cn.gravatar.com/avatar/';
+const GRAVATAR_SIZE = 150;
+const USE_GRAVATAR = true;
+const ANIMATION_DURATION = 300; // time in millis
+const NOTIFICATION_TIMEOUT = 3000; // time in millis
+const CHIVOX_API_KEY = '1564448929000013';
+const CHIVOX_SIGN_URL = './php/chivox_sign.php';
+const RECORD_TIME_LIMIT_PRE = 119500; //time in millis
+const RECORD_TIME_LIMIT_REPEAT = 179500; // time in millis
+const USER_ALIAS_MAX_CHAR = 20; // Ascii: 1 char, others: 2 char
+const RANGE_FILL_COLOR = '#81bbf9', RANGE_BK_COLOR = '#e9ecef';
+const HISTORY_AUDIO_MAX_TIME = 5; // days
 
 
 @observer
@@ -36,7 +63,8 @@ class App extends React.Component {
             navpillsSelected: -1,
             navTabs: [{ title: 'Reading aloud 朗读' }, { title: 'Presentation 演讲' }, { title: '单词纠音' }],
             navPills: [{ title: 'Architecture' }, { title: 'Business' }, { title: 'HS' }],
-            scoreLevel: 0 //打分等级 0 1 2 3 4 5  0为未打分
+            scoreLevel: 0, //打分等级 0 1 2 3 4 5  0为未打分
+            gradientColor:''
 
         }
     }
@@ -49,6 +77,7 @@ class App extends React.Component {
         this.setState({
             visible: true,
         });
+        this.startVUMeter()
     }
     showModal2 = () => {
         this.setState({
@@ -89,11 +118,81 @@ class App extends React.Component {
         });
     }
 
+    componentWillUpdate() {
+        // console.log('microphone',this.microphone.style.WebkitSliderRunnableTrack)
+    }
+
+    // 麦克风 声音强度
+    fillRange = (element, fillColor, bkColor, percentage = undefined, fadePercent = 0) => {
+        console.log('element', element)
+
+        if (isNaN(percentage)) percentage = Math.round(element.value / element.max * 1000) / 10;
+        if (isNaN(percentage)) percentage = 0;
+        let left = percentage - fadePercent,
+            right = percentage + fadePercent;
+        let gradientColor = `linear-gradient(90deg, ${fillColor} ${left}%, ${bkColor} ${right}%)`;
+
+        this.setState({
+            gradientColor:gradientColor
+        })
+        // element.style.WebkitSliderRunnableTrack = { background: gradientColor };
+
+        // element.style.MozRangeTrack = { background: gradientColor };
+        // element.style.MsFillLower = { background: fillColor };
+        // element.style.MsFillUpper = { background: bkColor };
+        // this.microphone.style.WebkitSliderRunnableTrack = { background: gradientColor };
+        // console.log('element', element.style.WebkitSliderRunnableTrack)
+
+    };
+
+
+    // 获取麦克风权限
+    startVUMeter = async () => {
+        if (!navigator.mediaDevices.getUserMedia) {
+            console.error("getUserMedia not supported by browser. ");
+            return;
+        }
+        try {
+            let AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+            let context = new AudioContext();
+
+            let analyserNode = context.createAnalyser();
+            analyserNode.fftSize = 32;
+            let draw = () => {
+                let array = new Uint8Array(analyserNode.frequencyBinCount);
+                analyserNode.getByteFrequencyData(array);
+                let values = 0;
+                let length = array.length;
+                for (let i = 0; i < length; i++) {
+                    values += (array[i]);
+                }
+                let average = values / length;
+                let percentage = Math.round(average / 255 * 1000) / 10;
+                let micVolCtl = this.microphone;
+                // console.log('micVolCtl',micVolCtl)
+                this.fillRange(micVolCtl, RANGE_FILL_COLOR, RANGE_BK_COLOR, micVolCtl.value * percentage, 1);
+                requestAnimationFrame(draw);
+            };
+
+            let audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+            let audioSource = context.createMediaStreamSource(audioStream);
+            audioSource.connect(analyserNode);
+            draw();
+        } catch (e) {
+            console.error("The following error occurred: " + e);
+            if (e.name === 'NotAllowedError') {
+                // showAlertModal('Microphone permission denied. ');
+            } else if (e.name === 'NotFoundError') {
+                // showAlertModal('Microphone not found. ');
+            }
+        }
+    }
+
 
 
 
     render() {
-        const { loginStauts, navtabsSelected, navTabs, navPills, navpillsSelected, scoreLevel } = this.state
+        const { loginStauts, navtabsSelected, navTabs, navPills, navpillsSelected, scoreLevel,gradientColor } = this.state
         // 已登录菜单
         const menu = (loginStauts ?
             <Menu>
@@ -192,9 +291,9 @@ class App extends React.Component {
                         <div className='tab-content'>
                             <Row id='practice-content-container' gutter={[{ xs: 8, sm: 30 }, { xs: 8, sm: 20 }]}>
                                 {[1, 2, 3, 4, 5, 6, 7, 8].map((v, i) => {
-                                    return <Col sm={8} xs={24} className="col-md-6 col-xl-4 pb-3"  >
+                                    return <Col sm={8} xs={24} key={i} className="col-md-6 col-xl-4 pb-3"  >
 
-                                        <div class="card h-100 border-0 shadow-sm" >
+                                        <div class="card h-100 border-0 shadow-sm" onClick={this.showModal} >
                                             <div class="card-body">
                                                 <div class="card-title">
                                                     <h4>[ 3 ] Sentence Reading Aloud Practice</h4>
@@ -266,24 +365,42 @@ class App extends React.Component {
                                         <Iconfont style={{ color: '#fff' }} className='play-icon' type='icon-bofang' />
 
                                     </div>
-                                    {/* 用法 https://ant.design/components/slider-cn/#header */}
-                                    <Slider className='slider' defaultValue={30} disabled={false} />
+                                    <input class="custom-range test-range" max="1"  ref={(node)=>this.testRange =node}
+                                        min="0" step="0.01"
+                                        type="range" />
+                                   
                                 </div>
                                 {/* timer */}
                                 <div className='voice-time'>
                                     <span>00:00</span>/<span>00:02</span>
                                 </div>
+                               
                                 {/* 麦克风 声音大小 */}
-                                <Row className='microphone'>
-                                      
-                                        <Col sm={8} xs={8} className='flex'>
-                                           <AudioFilled className='' /><Slider className='slider' defaultValue={30} disabled={false} />
-                                        </Col>
-                                        <Col sm={8} xs={0} className='flex'>
-                                        <Iconfont type='icon-zanting' /><Slider className='slider' defaultValue={30} disabled={false} />
-                                        </Col>
-                                       
-                                   
+                                <Row className='microphone' justify='end'>
+
+                                    <Col sm={4} xs={8} >
+                                        <div className='item'>
+                                            <AudioFilled style={{ fontSize: 20 }} className='icon' />
+                                            {/* <Slider className='slider' defaultValue={30} disabled={false} /> */}
+
+                                            <input class="custom-range microphone-input" ref={(node) => this.microphone = node} max="1" min="0" step="0.01" type="range"></input>
+                                            <style>{`.microphone-input::-webkit-slider-runnable-track { background:${gradientColor}}
+                                            .microphone-input::-moz-range-track { background:${gradientColor}}
+                                            .microphone-input::-ms-fill-lower { background:${gradientColor}}
+                                            .microphone-input::-ms-fill-upper { background:${gradientColor}}
+                                            `}</style>
+                                        </div>
+
+                                    </Col>
+                                    <Col sm={4} xs={0} >
+                                        <div className='item'>
+                                            {true && <Iconfont style={{ fontSize: 20 }} className='icon' type='icon-cancelMute-quxiaojingyin' />}
+                                            {false && <Iconfont style={{ fontSize: 20 }} className='icon' type='icon-jingyin' />}
+                                            <input class="custom-range " max="1" min="0" step="0.01" type="range" />
+                                        </div>
+                                    </Col>
+
+
                                 </Row>
                                 {/* button */}
                                 <div className='recording-box'>
