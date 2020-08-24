@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.less';
-import { Layout, Menu, Icon, Row, Col, Dropdown, Modal, Button, Pagination, Tabs, Slider } from 'antd';
+import { Layout, Menu, Row, Col, Dropdown, Modal, Button, Pagination, Tabs,Input,message } from 'antd';
 import { observer } from 'mobx-react'
-import stores from './stores'
+
 import { withRouter, Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import routers from './router'
+
 
 
 import Logo from './static/img/brand_logo.svg'
@@ -64,7 +64,9 @@ class App extends React.Component {
             navTabs: [{ title: 'Reading aloud 朗读' }, { title: 'Presentation 演讲' }, { title: '单词纠音' }],
             navPills: [{ title: 'Architecture' }, { title: 'Business' }, { title: 'HS' }],
             scoreLevel: 0, //打分等级 0 1 2 3 4 5  0为未打分
-            gradientColor:''
+            gradientColor: '', //麦克风强度
+            isShowCorrect: false, //打开 发音纠正 modal
+            isFreeInput:false
 
         }
     }
@@ -118,13 +120,35 @@ class App extends React.Component {
         });
     }
 
+    onChangeTabs = (val) => {
+        console.log(val);
+        if (val == 2) {
+            this.setState({
+                isShowCorrect: true
+            });
+        }
+        else (
+            this.setState({
+                isShowCorrect: false
+            })
+        )
+    }
+
+    onFreeInput = ()=>{
+        const {isFreeInput} = this.state
+        this.setState({
+            isFreeInput:!isFreeInput
+        })
+    }
+
     componentWillUpdate() {
         // console.log('microphone',this.microphone.style.WebkitSliderRunnableTrack)
+       
     }
 
     // 麦克风 声音强度
     fillRange = (element, fillColor, bkColor, percentage = undefined, fadePercent = 0) => {
-        console.log('element', element)
+        // console.log('element', element)
 
         if (isNaN(percentage)) percentage = Math.round(element.value / element.max * 1000) / 10;
         if (isNaN(percentage)) percentage = 0;
@@ -133,7 +157,7 @@ class App extends React.Component {
         let gradientColor = `linear-gradient(90deg, ${fillColor} ${left}%, ${bkColor} ${right}%)`;
 
         this.setState({
-            gradientColor:gradientColor
+            gradientColor: gradientColor
         })
         // element.style.WebkitSliderRunnableTrack = { background: gradientColor };
 
@@ -182,8 +206,11 @@ class App extends React.Component {
             console.error("The following error occurred: " + e);
             if (e.name === 'NotAllowedError') {
                 // showAlertModal('Microphone permission denied. ');
+                message.warning('Microphone permission denied.');
+             
             } else if (e.name === 'NotFoundError') {
                 // showAlertModal('Microphone not found. ');
+                message.warning('Microphone not found.');
             }
         }
     }
@@ -192,7 +219,7 @@ class App extends React.Component {
 
 
     render() {
-        const { loginStauts, navtabsSelected, navTabs, navPills, navpillsSelected, scoreLevel,gradientColor } = this.state
+        const { loginStauts, navtabsSelected, navTabs, navPills, navpillsSelected, scoreLevel, gradientColor,isFreeInput,isShowCorrect } = this.state
         // 已登录菜单
         const menu = (loginStauts ?
             <Menu>
@@ -257,9 +284,7 @@ class App extends React.Component {
                     </Layout>
                     <Layout className='main-content'>
                         {/* Tabs */}
-                        <Tabs className="eap-nav-tabs" defaultActiveKey="1" type="card" size={'large'} onChange={(v) => {
-                            console.log('Tabs', v)
-                        }}>
+                        <Tabs className="eap-nav-tabs" defaultActiveKey="1" type="card" size={'large'} onChange={this.onChangeTabs}>
                             {navTabs && navTabs.map((v, i) => {
                                 return <TabPane tab={v.title} key={i}></TabPane>
                             })}
@@ -293,13 +318,13 @@ class App extends React.Component {
                                 {[1, 2, 3, 4, 5, 6, 7, 8].map((v, i) => {
                                     return <Col sm={8} xs={24} key={i} className="col-md-6 col-xl-4 pb-3"  >
 
-                                        <div class="card h-100 border-0 shadow-sm" onClick={this.showModal} >
-                                            <div class="card-body">
-                                                <div class="card-title">
+                                        <div className="card h-100 border-0 shadow-sm" onClick={this.showModal} >
+                                            <div className="card-body">
+                                                <div className="card-title">
                                                     <h4>[ 3 ] Sentence Reading Aloud Practice</h4>
-                                                    <span class="badge badge-pill badge-info mr-2">General</span>
+                                                    <span className="badge badge-pill badge-info mr-2">General</span>
                                                 </div>
-                                                <div class="card-text">
+                                                <div className="card-text">
                                                     <p>Since those people have faced the same inconveniences and survived culture shock, they will understand the difficulties and offer some practical suggestions.</p>
                                                 </div>
                                             </div>
@@ -319,12 +344,12 @@ class App extends React.Component {
                         <p></p>
                         <p></p>
                         <p></p>
-                        <Button type="primary" onClick={this.showModal}>
+                        {/* <Button type="primary" onClick={this.showModal}>
                             Open Modal
                          </Button>
                         <Button type="primary" onClick={this.showModal2}>
                             Open Modal
-                         </Button>
+                         </Button> */}
                         {/* 打分 modal */}
                         <Modal
                             title="[ 3 ] Sentence Reading Aloud Practice"
@@ -334,18 +359,41 @@ class App extends React.Component {
                             onCancel={this.handleCancel}
                         >
                             <div className='product-modal'>
-                                {/* 评分 --打分后显示 */}
-                                <div class="rating" >
-                                    <div class="item1" ><i class="fas1 fa-square"></i> Perfect</div>
-                                    <div class="item2" ><i class="fas2 fa-square"></i> Fine</div>
-                                    <div class="item3" ><i class="fas3 fa-square"></i> Safe</div>
-                                    <div class="item4" ><i class="fas4 fa-square"></i> Bad</div>
-                                    <div class="item5" ><i class="fas5 fa-square"></i> Worst</div>
-                                </div>
-                                {/* 内容 */}
-                                <div className={`content-words level${scoreLevel}`}>
-                                    <p>The most advanced pollution control device was invented and patented by an American company. The emissions could be monitored and reduced by citizens and governments. It is suggested that pollution-reducing techniques take time and effort, and most individuals, businesses, and governments fail to make such practices a priority.</p>
-                                </div>
+                                {/* 朗读 && 发音纠正 */}
+                                {!isShowCorrect ? <div className='reading-aloud'>
+                                    {/* 评分 --打分后显示 */}
+                                    <div className="rating" >
+                                        <div className="item1" ><i className="fas1 fa-square"></i> Perfect</div>
+                                        <div className="item2" ><i className="fas2 fa-square"></i> Fine</div>
+                                        <div className="item3" ><i className="fas3 fa-square"></i> Safe</div>
+                                        <div className="item4" ><i className="fas4 fa-square"></i> Bad</div>
+                                        <div className="item5" ><i className="fas5 fa-square"></i> Worst</div>
+                                    </div>
+                                    {/* 内容 */}
+                                    <div className={`content-words level${scoreLevel}`}>
+                                        <p>The most advanced pollution control device was invented and patented by an American company. The emissions could be monitored and reduced by citizens and governments. It is suggested that pollution-reducing techniques take time and effort, and most individuals, businesses, and governments fail to make such practices a priority.</p>
+                                    </div>
+                                </div> :
+                                    <div className='pronunciation-correct'>
+                                        <div className='content-box'>
+                                        {!isFreeInput ? <div className='title'>duck</div> :
+                                            <div className='free-input-box'>
+                                                <Input
+                                                    type="text"
+
+                                                    className='free-input'
+                                                   
+                                                />
+                                                <Button>Search</Button>
+                                            </div>
+                                        }
+                                        </div>
+                                        <div className='desc'>The accuracy rate of error correction is 90%. If you make mistakes, I will never let it go</div>
+                                        {!isFreeInput && <div className='num'>2/20</div>}
+                                        {!isFreeInput && <div className='next'>next</div>}
+                                    <div className='free' onClick={this.onFreeInput}>{isFreeInput ? 'experience' :'Free'}</div>
+                                    </div>
+                                }
                                 {/* 操作 */}
                                 <div className='handle-btn'>
                                     {/* loading */}
@@ -365,16 +413,16 @@ class App extends React.Component {
                                         <Iconfont style={{ color: '#fff' }} className='play-icon' type='icon-bofang' />
 
                                     </div>
-                                    <input class="custom-range test-range" max="1"  ref={(node)=>this.testRange =node}
+                                    <input className="custom-range test-range" max="1" ref={(node) => this.testRange = node}
                                         min="0" step="0.01"
                                         type="range" />
-                                   
+
                                 </div>
                                 {/* timer */}
                                 <div className='voice-time'>
                                     <span>00:00</span>/<span>00:02</span>
                                 </div>
-                               
+
                                 {/* 麦克风 声音大小 */}
                                 <Row className='microphone' justify='end'>
 
@@ -383,7 +431,7 @@ class App extends React.Component {
                                             <AudioFilled style={{ fontSize: 20 }} className='icon' />
                                             {/* <Slider className='slider' defaultValue={30} disabled={false} /> */}
 
-                                            <input class="custom-range microphone-input" ref={(node) => this.microphone = node} max="1" min="0" step="0.01" type="range"></input>
+                                            <input className="custom-range microphone-input" ref={(node) => this.microphone = node} max="1" min="0" step="0.01" type="range"></input>
                                             <style>{`.microphone-input::-webkit-slider-runnable-track { background:${gradientColor}}
                                             .microphone-input::-moz-range-track { background:${gradientColor}}
                                             .microphone-input::-ms-fill-lower { background:${gradientColor}}
@@ -396,7 +444,7 @@ class App extends React.Component {
                                         <div className='item'>
                                             {true && <Iconfont style={{ fontSize: 20 }} className='icon' type='icon-cancelMute-quxiaojingyin' />}
                                             {false && <Iconfont style={{ fontSize: 20 }} className='icon' type='icon-jingyin' />}
-                                            <input class="custom-range " max="1" min="0" step="0.01" type="range" />
+                                            <input className="custom-range " max="1" min="0" step="0.01" type="range" />
                                         </div>
                                     </Col>
 
@@ -415,9 +463,9 @@ class App extends React.Component {
                                     <div>Tap to start</div>
                                 </div>
                                 {/* 评分 */}
-                                <div class="scores-results">
-                                    <div class="stitle" >Total: 0</div>
-                                    <Row class="scon">
+                                <div className="scores-results">
+                                    <div className="stitle" >Total: 0</div>
+                                    <Row className="scon">
                                         <Col sm={8} xs={24}>
                                             Fluency: 0
                                         </Col>

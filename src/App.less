@@ -32,7 +32,9 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
+    .ant-layout {
+        min-height: 0;
+    }
 
     .ant-layout-header {
         width: 100%;
@@ -346,11 +348,60 @@ body {
     top:10px;
     .ant-modal-title {
         font-size: 1.5rem;
+        padding-right: 20px;
     }
 }
 
 
 .product-modal {
+    .pronunciation-correct{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 10px;
+        .content-box{
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .title{
+            font-size: 3rem;
+            color: #333;
+            font-weight: bold;
+            
+        }
+        .desc{
+            margin-top: 50px;
+            font-size: 14px;
+            color: #666
+        }
+        .num{
+            position: absolute;
+            right:0;
+            top:0;
+            color: #999
+        }
+        .next{
+            position: absolute;
+            right:0;
+            top:30px;
+            color: #007bff
+        }
+        .free{
+            position: absolute;
+            right:0;
+            bottom:50px;
+            color: #007bff
+        }
+        .free-input{
+            margin-right: 10px;
+            width: 200px;
+        }
+    }
     .content-words {
         border-radius: 0.25rem;
         border: 1px solid #dee2e6;
